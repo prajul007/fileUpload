@@ -12,4 +12,7 @@ public class ApplicationConstants {
     public static final String TASK_ID = "taskId";
     public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String FILE_UPLOAD_PUBLIC_DIR = "public";
+    public static final String FILE_UPLOAD_PRIVATE_DIR = "private";
+    public static final String FILE_UPLOAD_DEFAULT_DIR = "default";
 }

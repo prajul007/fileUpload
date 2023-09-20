@@ -14,4 +14,6 @@ public class FileDetails {
     String statusDesc;
     String clientIpAddress;
     String userId;
+    String uploadDir;
+    String fileExtension;
 }

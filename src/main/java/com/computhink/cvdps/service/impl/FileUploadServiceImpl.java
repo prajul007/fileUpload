@@ -40,13 +40,36 @@ public class FileUploadServiceImpl implements FileUploadService {
         try {
             String taskId= UUID.randomUUID().toString();
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-            fileUploadRepo.save(setFileDetails(taskId, fileName,clientId,ipAddress));
-            uploadFile(file,taskId,fileName);
+            String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+            String uploadDirectory = getUploadDirectoryBasedOnFilePrefix(fileName);
+            fileUploadRepo.save(setFileDetails(taskId, fileName,clientId,ipAddress,extension,uploadDirectory));
+            uploadFile(file,taskId,extension,uploadDirectory);
             customFileUploadRepo.updateFileUploadStatus(ApplicationConstants.STATUS_FINISHED,ApplicationConstants.STATUS_DESC_FINISHED,taskId);
             return setUploadFileResponse(file,taskId,fileName);
         } catch (Exception ex) {
             throw new RuntimeException("Exception occurred! + ",ex);
         }
+    }
+
+    private String getUploadDirectoryBasedOnFilePrefix(String fileName) {
+        if(fileName==null) {
+            log.error("FileUpload Exception Occurred while uploading file to the root folder: ");
+            throw new RuntimeException("FileUpload Exception Occurred while uploading file to the root folder: ");
+        }
+        if(fileName.length() > 7){
+            String isPublic = org.apache.commons.lang3.StringUtils.substring(fileName, 0, 6);
+            if(isPublic.equals("public")) {
+                return ApplicationConstants.FILE_UPLOAD_PUBLIC_DIR;
+            }
+        }
+        if(fileName.length() > 8){
+            String isPrivate = org.apache.commons.lang3.StringUtils.substring(fileName, 0, 7);
+            if(isPrivate.equals("private")) {
+                return ApplicationConstants.FILE_UPLOAD_PRIVATE_DIR;
+            }
+        }
+        return ApplicationConstants.FILE_UPLOAD_DEFAULT_DIR;
+
     }
 
     private UploadFileResponse setUploadFileResponse(MultipartFile file, String taskId, String fileName) {
@@ -58,10 +81,10 @@ public class FileUploadServiceImpl implements FileUploadService {
         return uploadFileResponse;
     }
 
-    private void uploadFile(MultipartFile file,String taskId, String fileName){
-        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+    private void uploadFile(MultipartFile file, String taskId, String extension, String uploadDirectory){
+
         try {
-            Path fileStorageLocation = Paths.get(ApplicationConstants.FILE_UPLOAD_DESTINATION).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(ApplicationConstants.FILE_UPLOAD_DESTINATION + "/" + uploadDirectory).toAbsolutePath().normalize();
             try {
                 Files.createDirectories(fileStorageLocation);
             } catch (Exception ex) {
@@ -75,7 +98,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         }
     }
 
-    private FileDetails setFileDetails(String taskId, String fileName, String clientId, String ipAddress) {
+    private FileDetails setFileDetails(String taskId, String fileName, String clientId, String ipAddress, String extension, String uploadDirectory) {
         FileDetails fileDetails = new FileDetails();
         fileDetails.setFileName(fileName);
         fileDetails.setStatus(ApplicationConstants.STATUS_IN_PROGRESSS);
@@ -84,6 +107,8 @@ public class FileUploadServiceImpl implements FileUploadService {
         fileDetails.setClientIpAddress(ipAddress);
         fileDetails.setUserId(clientId);
         fileDetails.setStatusDesc(ApplicationConstants.STATUS_DESC_IN_PROGRESSS);
+        fileDetails.setUploadDir(uploadDirectory);
+        fileDetails.setFileExtension(extension);
         return fileDetails;
     }
 
