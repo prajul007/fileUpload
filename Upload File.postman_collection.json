@@ -1,0 +1,434 @@
+{
+	"info": {
+		"_postman_id": "f8a005ed-2525-4b98-bbbb-13df6b40875d",
+		"name": "Upload File",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19262055"
+	},
+	"item": [
+		{
+			"name": "HeathCheck",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/actuator/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"actuator",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"prajul123\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"prajul123@gmail.com\",\r\n    \"roles\": \"ROLE_USER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/addNewUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"addNewUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Prajul\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"prajul@gmail.com\",\r\n    \"roles\": \"ROLE_ADMIN\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/addNewUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"addNewUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate User Auth Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"prajul123@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/generateToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"generateToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Admin Auth Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"Prajul\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/generateToken",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"generateToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWwxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk1MjI1MDU4LCJleHAiOjE2OTUyMjY4NTh9.3m-8ykN2HOf6nrvLTF_zEmvleevCiLhhD4WqIXc3fGg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/user/userProfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"user",
+						"userProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Admin Profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJQcmFqdWwiLCJpYXQiOjE2OTUxMTIxMzYsImV4cCI6MTY5NTExMzkzNn0.bnBcAdZDP4775ByLPuKb2VhnFPm2hCEcngYPRQrW9Nc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/admin/adminProfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"admin",
+						"adminProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Single File",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWwxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk1MTk5NDQwLCJleHAiOjE2OTUyMDEyNDB9.j7atNI0l54jmUaaN77zKkpam6guPg8Wc9Rq-LKnVqEk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/p0g03s9/Downloads/7ac7f300-4ebd-49b3-a2fc-b0886c32fa0c.docx"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/file/uploadSingleFile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"file",
+						"uploadSingleFile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Multiple File",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWwxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk1MTk5NDQwLCJleHAiOjE2OTUyMDEyNDB9.j7atNI0l54jmUaaN77zKkpam6guPg8Wc9Rq-LKnVqEk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": [
+								"/Users/p0g03s9/Downloads/7ac7f300-4ebd-49b3-a2fc-b0886c32fa0c.docx",
+								"/Users/p0g03s9/Downloads/Failed Requests - 0eff8a9d-a178-4f7e-8cad-70628f0183c0.xlsx"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/file/uploadMultipleFiles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"file",
+						"uploadMultipleFiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Based on TimeStamp",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWwxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk1MjI1MDU4LCJleHAiOjE2OTUyMjY4NTh9.3m-8ykN2HOf6nrvLTF_zEmvleevCiLhhD4WqIXc3fGg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fromYear\": 2023,\n    \"fromMonth\": 9,\n    \"fromDay\": 20,\n    \"fromHour\": 14,\n    \"fromMinute\": 15,\n    \"fromSecond\": 0,\n\n    \"endYear\": 2023,\n    \"endMonth\": 9,\n    \"endDay\": 20,\n    \"endHour\": 21,\n    \"endMinute\": 30,\n    \"endSecond\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/file/filterByTimestamp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"file",
+						"filterByTimestamp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get File Details Based on TaskId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWxAZ21haWwuY29tIiwiaWF0IjoxNjk1MTk4OTgyLCJleHAiOjE2OTUyMDA3ODJ9.5X36X7tRqTYaO0iqK2kewrXDv3YqOlQJE_Mtl2sz2_o",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/file/fileDetails/7e00ecdb-dff2-4e82-90c0-903c7d7834e8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"file",
+						"fileDetails",
+						"7e00ecdb-dff2-4e82-90c0-903c7d7834e8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Files Uploaded by User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwcmFqdWwxMjNAZ21haWwuY29tIiwiaWF0IjoxNjk1MTk5NDQwLCJleHAiOjE2OTUyMDEyNDB9.j7atNI0l54jmUaaN77zKkpam6guPg8Wc9Rq-LKnVqEk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/file/fileUploadedByMe",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"file",
+						"fileUploadedByMe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Swagger URL",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
