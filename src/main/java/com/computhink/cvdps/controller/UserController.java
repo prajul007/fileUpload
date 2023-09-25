@@ -4,9 +4,11 @@ package com.computhink.cvdps.controller;
 import com.computhink.cvdps.exceptions.UserValidationException;
 import com.computhink.cvdps.model.Users.AuthRequest;
 import com.computhink.cvdps.model.Users.UserInfo;
+import com.computhink.cvdps.repository.CustomUserInforRepository;
 import com.computhink.cvdps.service.UserService.JwtService;
 import com.computhink.cvdps.service.UserService.UserInfoServiceImpl;
 import com.computhink.cvdps.service.UserService.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,9 @@ public class UserController {
     UserServiceImpl userService;
 
     @Autowired
+    CustomUserInforRepository userInforRepository;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
@@ -39,9 +44,13 @@ public class UserController {
     }
 
     @PostMapping("/addNewUser")
-    public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo) {
+    public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo,
+                                             HttpServletRequest httpServletRequest) {
         try {
-            return new ResponseEntity<>(userService.addUser(userInfo),HttpStatus.OK);
+            userInfo.setClientIpAddress(httpServletRequest.getRemoteAddr());
+            if(userService.addUser(userInfo))
+                return new ResponseEntity<>(jwtService.generateToken(userInfo.getEmail()),HttpStatus.OK);
+            return new ResponseEntity<>("Unable to create User. Please contact System Admin.", HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -63,7 +72,8 @@ public class UserController {
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
+            String token=  jwtService.generateToken(authRequest.getUsername());
+            return token;
         } else {
             throw new UsernameNotFoundException("invalid user request !");
         }

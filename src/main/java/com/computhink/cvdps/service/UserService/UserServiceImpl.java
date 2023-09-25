@@ -23,14 +23,14 @@ public class UserServiceImpl {
 
     @Autowired
     private PasswordEncoder encoder;
-    public String addUser(UserInfo userInfo) throws UserValidationException {
+    public boolean addUser(UserInfo userInfo) throws UserValidationException {
         validateUserInfo(userInfo);
         if(userInfoRepository.findByEmail(userInfo.getEmail()).isPresent()) {
             throw new UserValidationException("Username Already Exists With this Email Id!!! Please Provide new Email Address");
         }
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
-        return "User Added Successfully";
+        return true;
     }
 
     private void validateUserInfo(UserInfo user) throws UserValidationException {
