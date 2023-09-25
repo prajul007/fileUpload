@@ -5,18 +5,18 @@ import lombok.Data;
 
 @Data
 public class DateFilterRequestBody {
-    int fromYear;
-    int fromMonth;
-    int fromDay;
-    int fromHour;
-    int fromMinute;
-    int fromSecond;
+    Integer fromYear;
+    Integer fromMonth;
+    Integer fromDay;
+    Integer fromHour;
+    Integer fromMinute;
+    Integer fromSecond;
 
-    int endYear;
-    int endMonth;
-    int endDay;
-    int endHour;
-    int endMinute;
-    int endSecond;
+    Integer endYear;
+    Integer endMonth;
+    Integer endDay;
+    Integer endHour;
+    Integer endMinute;
+    Integer endSecond;
 
 }

@@ -12,6 +12,9 @@ import com.computhink.cvdps.service.FileUploadService;
 import com.computhink.cvdps.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +23,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -112,17 +118,40 @@ public class FileUploadServiceImpl implements FileUploadService {
         return fileDetails;
     }
 
-    public List<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date){
+    public Page<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date,Integer from){
+        Integer fromYear = date.getFromYear();
+        Integer endYear = date.getEndYear() ==null ? fromYear : date.getEndYear();
+        Integer fromMonth = date.getFromMonth() == null ? 1 : date.getFromMonth();
+        Integer endMonth = date.getEndMonth() == null ? 12: date.getEndMonth();
+        Integer fromDay = date.getFromDay() == null? 1: date.getFromDay();
+        Integer endDay = date.getEndDay() == null? getNoOfDaysBasedOnMonthAndYear(endMonth, endYear) : date.getEndDay();
+        Integer fromHour = date.getFromHour() == null? 0: date.getFromHour();
+        Integer endHour = date.getEndHour() == null? 23: date.getEndHour();
+        Integer fromMinute = date.getFromMinute() == null? 0: date.getFromMinute();
+        Integer endMinute = date.getEndMinute() == null? 59: date.getEndMinute();
+        Integer fromSecond = date.getFromSecond() == null? 0: date.getFromSecond();
+        Integer endSecond = date.getEndSecond() == null? 59: date.getEndSecond();
+
         return fileUploadRepo.getTaskIdByDate(
-                LocalDateTime.of(date.getFromYear(), date.getFromMonth(), date.getFromDay(), date.getFromHour(), date.getFromMinute(), date.getFromSecond()),
-                LocalDateTime.of(date.getEndYear(),date.getEndMonth(), date.getEndDay(), date.getEndHour(), date.getEndMinute(), date.getEndSecond()));
+                LocalDateTime.of(fromYear,fromMonth,fromDay,fromHour,fromMinute,fromSecond),
+                LocalDateTime.of(endYear,endMonth,endDay,endHour,endMinute,endSecond),
+                PageRequest.of(from,ApplicationConstants.PAGE_SIZE));
     }
 
     public FileDetails getFileDetailsFilterByTaskId(String taskId){
         return fileUploadRepo.findByTaskId(taskId);
     }
 
-    public List<FileDetails> getFileDetailsFilterByUserId(String userId){
-        return fileUploadRepo.findByUserId(userId);
+    public Page<FileDetails> getFileDetailsFilterByUserId(String userId,Integer from){
+        return fileUploadRepo.findByUserId(userId, PageRequest.of(from,ApplicationConstants.PAGE_SIZE));
+    }
+
+    public Integer getNoOfDaysBasedOnMonthAndYear(Integer month, Integer year){
+        if(month == 2){
+            if((year % 400 == 0) || (year % 100 != 0) && (year % 4 == 0)) return 29;
+            return 28;
+        }
+        List<Integer> datesBasedOnMonths = Arrays.asList(31,28,31,30,31,30,31,31,30,31,30,31);
+        return datesBasedOnMonths.get(month-1);
     }
 }

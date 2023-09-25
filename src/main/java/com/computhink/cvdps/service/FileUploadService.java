@@ -4,6 +4,7 @@ import com.computhink.cvdps.model.DateFilterRequestBody;
 import com.computhink.cvdps.model.FileDetails;
 import com.computhink.cvdps.model.FileDetailsResponse;
 import com.computhink.cvdps.model.UploadFileResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -15,8 +16,8 @@ public interface FileUploadService {
 
     UploadFileResponse storeFile(MultipartFile file, String clientId, String ipAddress) throws IOException ;
 
-    List<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date);
+    Page<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date,Integer from);
 
     FileDetails getFileDetailsFilterByTaskId(String taskId);
-    List<FileDetails> getFileDetailsFilterByUserId(String userId);
+    Page<FileDetails> getFileDetailsFilterByUserId(String userId,Integer from);
 }

@@ -4,6 +4,8 @@ package com.computhink.cvdps.repository;
 import com.computhink.cvdps.model.FileDetails;
 import com.computhink.cvdps.model.FileDetailsResponse;
 import com.computhink.cvdps.model.Users.UserInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,8 +19,8 @@ import java.util.Optional;
 public interface FileUploadRepo extends MongoRepository<FileDetails,String> {
 
     @Query(value = "{'receivedTs' : { $gte: ?0, $lte: ?1 } }",fields="{ 'taskId' : 1, 'fileName': 1, 'status': 1, 'userId': 1 }")
-    public List<FileDetailsResponse> getTaskIdByDate(LocalDateTime from, LocalDateTime to);
+    public Page<FileDetailsResponse> getTaskIdByDate(LocalDateTime from, LocalDateTime to, Pageable pageable);
 
     FileDetails findByTaskId(String taskId);
-    List<FileDetails> findByUserId(String userId);
+    Page<FileDetails> findByUserId(String userId,Pageable pageable);
 }

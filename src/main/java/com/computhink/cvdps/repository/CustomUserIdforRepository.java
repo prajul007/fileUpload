@@ -2,7 +2,7 @@ package com.computhink.cvdps.repository;
 
 import com.computhink.cvdps.constants.ApplicationConstants;
 import com.computhink.cvdps.model.FileDetails;
-import com.computhink.cvdps.utils.DateUtil;
+import com.computhink.cvdps.model.Users.UserInfo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +15,16 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @Slf4j
-public class CustomUserInforRepository {
+public class CustomUserIdforRepository {
 
     @Autowired
     MongoTemplate mongoTemplate;
 
     public void updateTokenGenerated(String username,String token) {
-        Query query = new Query(Criteria.where(ApplicationConstants.USERNAME).is(username));
+        Query query = new Query(Criteria.where("email").is(username));
         Update update = new Update();
         update.set(ApplicationConstants.TOKEN, token);
-        update.set(ApplicationConstants.COMPLETION_TS, DateUtil.getCurrentTimeStamp());
-        UpdateResult result = mongoTemplate.updateFirst(query, update, FileDetails.class);
+        UpdateResult result = mongoTemplate.updateFirst(query, update, UserInfo.class);
 
         if(result == null)
             log.info("No documents updated");
