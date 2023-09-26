@@ -10,6 +10,7 @@ import com.computhink.cvdps.service.FileUploadService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,38 +41,11 @@ public class FileUploadController {
     @Autowired
     UserInfoRepository userInfoRepository;
 
-    @PostMapping("/uploadSingleFile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> uploadSingleFile(@RequestParam("file") MultipartFile file,
-                                              HttpServletRequest httpServletRequest,
-                                              Authentication authentication,
-                                              @RequestHeader("authorization") String token) {
-        Optional<UserInfo> userInfoOptional = userInfoRepository.findByEmail(authentication.getName());
-        token = token.substring(7);
-        if(userInfoOptional.isPresent()){
-            if(token.equals(userInfoOptional.get().getToken())){
-                if(file.getSize()>1048576){
-                    return new ResponseEntity<>("File Size should not be more than 1MB. ",HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-                if(userInfoOptional.isPresent()){
-                    if(userInfoOptional.get().getClientIpAddress().equals(httpServletRequest.getRemoteAddr())){
-                        try{
-                            return new ResponseEntity<>(fileUploadService.storeFile(file,authentication.getName(),httpServletRequest.getRemoteAddr()), HttpStatus.OK);
-                        } catch (Exception ex){
-                            log.error("Exception Occurred while uploading single file to the root folder: ", ex);
-                            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                        }
-                    } else {
-                        return new ResponseEntity<>("Unable to match the ipAddress. Please Contact Admin.",HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                }
-                return new ResponseEntity<>("Unable to upload file. Please Contact admin.",HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-        return new ResponseEntity<>("Authentication Failed. Please Login Again.",HttpStatus.UNAUTHORIZED);
-    }
+    @Value("${file.upload.max.size}")
+    private long fileUploadMaxSize;
 
-    @PostMapping("/uploadMultipleFiles")
+
+    @PostMapping("/uploadFiles")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public List<ResponseEntity<?>> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files,
                                                        Authentication authentication,
@@ -79,6 +53,7 @@ public class FileUploadController {
                                                        @RequestHeader("authorization") String token) {
         Optional<UserInfo> userInfoOptional = userInfoRepository.findByEmail(authentication.getName());
         token = token.substring(7);
+        // File Size should come from properties.
         if(userInfoOptional.isPresent()){
             if(token.equals(userInfoOptional.get().getToken())){
                 return Arrays.asList(files)

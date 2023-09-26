@@ -1,6 +1,7 @@
 package com.computhink.cvdps.controller;
 
 
+import com.computhink.cvdps.constants.ApplicationConstants;
 import com.computhink.cvdps.model.Users.AuthRequest;
 import com.computhink.cvdps.model.Users.UserInfo;
 import com.computhink.cvdps.repository.CustomUserIdforRepository;
@@ -48,13 +49,15 @@ public class UserController {
         return "Welcome this endpoint is not secure";
     }
 
-    @PostMapping("/addNewUser")
+    @PostMapping("/registerClient")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo,
                                              HttpServletRequest httpServletRequest) {
         try {
             String token = jwtService.generateToken(userInfo.getEmail());
             userInfo.setClientIpAddress(httpServletRequest.getRemoteAddr());
             userInfo.setToken(token);
+            userInfo.setRoles(ApplicationConstants.ROLE_USER);
             if(userService.addUser(userInfo)){
                 userIdforRepository.updateTokenGenerated(userInfo.getEmail(),token);
                 return new ResponseEntity<>(token,HttpStatus.OK);

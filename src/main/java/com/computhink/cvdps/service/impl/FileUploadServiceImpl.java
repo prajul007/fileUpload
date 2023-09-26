@@ -12,9 +12,9 @@ import com.computhink.cvdps.service.FileUploadService;
 import com.computhink.cvdps.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,9 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -41,6 +39,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     CustomFileUploadRepo customFileUploadRepo;
 
+    @Value("${base.path}")
+    private String basePath;
+
     @Override
     public UploadFileResponse storeFile(MultipartFile file,String clientId, String ipAddress){
         try {
@@ -50,7 +51,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             String uploadDirectory = getUploadDirectoryBasedOnFilePrefix(fileName);
             fileUploadRepo.save(setFileDetails(taskId, fileName,clientId,ipAddress,extension,uploadDirectory));
             uploadFile(file,taskId,extension,uploadDirectory);
-            customFileUploadRepo.updateFileUploadStatus(ApplicationConstants.STATUS_FINISHED,ApplicationConstants.STATUS_DESC_FINISHED,taskId);
+            customFileUploadRepo.updateFileUploadStatus(ApplicationConstants.STATUS_PENDING,ApplicationConstants.STATUS_DESC_PENDING,taskId);
             return setUploadFileResponse(file,taskId,fileName);
         } catch (Exception ex) {
             throw new RuntimeException("Exception occurred! + ",ex);
@@ -90,7 +91,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     private void uploadFile(MultipartFile file, String taskId, String extension, String uploadDirectory){
 
         try {
-            Path fileStorageLocation = Paths.get(ApplicationConstants.FILE_UPLOAD_DESTINATION + "/" + uploadDirectory).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(basePath + "/" + uploadDirectory).toAbsolutePath().normalize();
             try {
                 Files.createDirectories(fileStorageLocation);
             } catch (Exception ex) {
@@ -112,7 +113,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         fileDetails.setTaskId(taskId);
         fileDetails.setClientIpAddress(ipAddress);
         fileDetails.setUserId(clientId);
-        fileDetails.setStatusDesc(ApplicationConstants.STATUS_DESC_IN_PROGRESSS);
+        fileDetails.setTaskResult(ApplicationConstants.STATUS_DESC_IN_PROGRESSS);
         fileDetails.setUploadDir(uploadDirectory);
         fileDetails.setFileExtension(extension);
         return fileDetails;

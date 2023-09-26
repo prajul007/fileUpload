@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "f8a005ed-2525-4b98-bbbb-13df6b40875d",
-		"name": "Spring Security",
+		"name": "File Upload",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "19262055"
 	},
@@ -32,40 +32,21 @@
 		{
 			"name": "Add User",
 			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"tester_dummy\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"tester@gmail.com\",\r\n    \"roles\": \"ROLE_USER\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDMxMzEsImV4cCI6MTY5NTc0NDkzMX0.kSwaXiOMsg4WZvd7F7k5POSFF9g2HKTlZlJKMHjcUXU",
+							"type": "string"
 						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/auth/addNewUser",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"auth",
-						"addNewUser"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Add Admin",
-			"request": {
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"admin\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"admin@gmail.com\",\r\n    \"roles\": \"ROLE_ADMIN\"\r\n}",
+					"raw": "{\r\n    \"name\": \"dev_dummy\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"dummy12@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -73,7 +54,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/addNewUser",
+					"raw": "http://localhost:8080/auth/registerClient",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -81,7 +62,7 @@
 					"port": "8080",
 					"path": [
 						"auth",
-						"addNewUser"
+						"registerClient"
 					]
 				}
 			},
@@ -123,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"prajul\",\r\n  \"password\": \"123456\"\r\n}",
+					"raw": "{\r\n  \"username\": \"admin@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -232,14 +213,14 @@
 			"response": []
 		},
 		{
-			"name": "Upload Multiple File",
+			"name": "Files Upload",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDY5MDIsImV4cCI6MTY5NTc0ODcwMn0.DCepEZmH6z8hOVjOh3lTxaUKjLWZiLalxP5kvL68OrU",
 							"type": "string"
 						}
 					]
@@ -252,15 +233,12 @@
 						{
 							"key": "files",
 							"type": "file",
-							"src": [
-								"/Users/p0g03s9/Downloads/private_file.docx",
-								"/Users/p0g03s9/Downloads/public_file.docx"
-							]
+							"src": "/Users/p0g03s9/Downloads/private_file.docx"
 						}
 					]
 				},
 				"url": {
-					"raw": "http://localhost:8080/file/uploadMultipleFiles",
+					"raw": "http://localhost:8080/file/uploadFiles",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -268,7 +246,7 @@
 					"port": "8080",
 					"path": [
 						"file",
-						"uploadMultipleFiles"
+						"uploadFiles"
 					]
 				}
 			},
@@ -466,7 +444,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDY5MDIsImV4cCI6MTY5NTc0ODcwMn0.DCepEZmH6z8hOVjOh3lTxaUKjLWZiLalxP5kvL68OrU",
 							"type": "string"
 						}
 					]

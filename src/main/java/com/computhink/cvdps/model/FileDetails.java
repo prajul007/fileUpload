@@ -11,9 +11,10 @@ public class FileDetails {
     String status;
     LocalDateTime receivedTs;
     LocalDateTime completionTs;
-    String statusDesc;
     String clientIpAddress;
     String userId;
     String uploadDir;
     String fileExtension;
+    String taskResult;
+    String resultDetails;
 }
