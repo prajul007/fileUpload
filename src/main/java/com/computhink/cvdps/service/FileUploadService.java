@@ -16,7 +16,7 @@ public interface FileUploadService {
 
     UploadFileResponse storeFile(MultipartFile file, String clientId, String ipAddress) throws IOException ;
 
-    Page<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date,Integer from);
+    Page<FileDetails> filterByTimestamp(DateFilterRequestBody date,Integer from);
 
     FileDetails getFileDetailsFilterByTaskId(String taskId);
     Page<FileDetails> getFileDetailsFilterByUserId(String userId,Integer from);

@@ -1,7 +1,6 @@
 package com.computhink.cvdps.repository;
 
 import com.computhink.cvdps.constants.ApplicationConstants;
-import com.computhink.cvdps.model.FileDetails;
 import com.computhink.cvdps.model.Users.UserInfo;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;

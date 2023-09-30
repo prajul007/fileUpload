@@ -12,7 +12,7 @@ public class FileDetails {
     LocalDateTime receivedTs;
     LocalDateTime completionTs;
     String clientIpAddress;
-    String userId;
+    String clientId;
     String uploadDir;
     String fileExtension;
     String taskResult;

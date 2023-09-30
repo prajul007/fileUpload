@@ -2,8 +2,6 @@ package com.computhink.cvdps.controller;
 
 
 import com.computhink.cvdps.model.DateFilterRequestBody;
-import com.computhink.cvdps.model.FileDetails;
-import com.computhink.cvdps.model.FileDetailsResponse;
 import com.computhink.cvdps.model.Users.UserInfo;
 import com.computhink.cvdps.repository.UserInfoRepository;
 import com.computhink.cvdps.service.FileUploadService;
@@ -11,12 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -83,12 +79,14 @@ public class FileUploadController {
     }
 
 
-    @PostMapping("/filterByTimestamp")
+
+    // Change Function Name
+    @PostMapping("/taskLogs")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> filterByTimestamp(@RequestBody DateFilterRequestBody dateFilterRequestBody,
-                                               Authentication authentication,
-                                               @RequestParam("from") Integer from,
-                                               @RequestHeader("authorization") String token) {
+    public ResponseEntity<?> getTaskLogs(@RequestBody DateFilterRequestBody dateFilterRequestBody,
+                                         Authentication authentication,
+                                         @RequestParam("from") Integer from,
+                                         @RequestHeader("authorization") String token) {
         Optional<UserInfo> userInfoOptional = userInfoRepository.findByEmail(authentication.getName());
         token = token.substring(7);
         if(userInfoOptional.isPresent()){
@@ -104,9 +102,9 @@ public class FileUploadController {
         return new ResponseEntity<>("Authentication Failed. Please Login Again.",HttpStatus.UNAUTHORIZED);
     }
 
-    @PostMapping("/fileDetails")
+    @PostMapping("/taskStatus")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public List<ResponseEntity<?>> getFileDetailsFilterByTaskId(@RequestBody List<String> taskIds,
+    public List<ResponseEntity<?>> getTaskStatus(@RequestBody List<String> taskIds,
                                                                 Authentication authentication,
                                                                 @RequestHeader("authorization") String token) {
         Optional<UserInfo> userInfoOptional = userInfoRepository.findByEmail(authentication.getName());

@@ -3,10 +3,11 @@ package com.computhink.cvdps.service.impl;
 import com.computhink.cvdps.constants.ApplicationConstants;
 import com.computhink.cvdps.exceptions.FileUploadException;
 import com.computhink.cvdps.model.DateFilterRequestBody;
+import com.computhink.cvdps.model.ErrorDetails;
 import com.computhink.cvdps.model.FileDetails;
-import com.computhink.cvdps.model.FileDetailsResponse;
 import com.computhink.cvdps.model.UploadFileResponse;
 import com.computhink.cvdps.repository.CustomFileUploadRepo;
+import com.computhink.cvdps.repository.ErrorDetailsRepository;
 import com.computhink.cvdps.repository.FileUploadRepo;
 import com.computhink.cvdps.service.FileUploadService;
 import com.computhink.cvdps.utils.DateUtil;
@@ -39,14 +40,17 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Autowired
     CustomFileUploadRepo customFileUploadRepo;
 
+    @Autowired
+    ErrorDetailsRepository errorDetailsRepository;
+
     @Value("${base.path}")
     private String basePath;
 
     @Override
     public UploadFileResponse storeFile(MultipartFile file,String clientId, String ipAddress){
+        String taskId= UUID.randomUUID().toString();
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            String taskId= UUID.randomUUID().toString();
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
             String uploadDirectory = getUploadDirectoryBasedOnFilePrefix(fileName);
             fileUploadRepo.save(setFileDetails(taskId, fileName,clientId,ipAddress,extension,uploadDirectory));
@@ -54,8 +58,19 @@ public class FileUploadServiceImpl implements FileUploadService {
             customFileUploadRepo.updateFileUploadStatus(ApplicationConstants.STATUS_PENDING,ApplicationConstants.STATUS_DESC_PENDING,taskId);
             return setUploadFileResponse(file,taskId,fileName);
         } catch (Exception ex) {
+            errorDetailsRepository.save(setErrorDetails(taskId,fileName,ex.getStackTrace(),clientId));
             throw new RuntimeException("Exception occurred! + ",ex);
         }
+    }
+
+    private ErrorDetails setErrorDetails(String taskId, String fileName, StackTraceElement[] stackTrace, String clientId) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setTaskId(taskId);
+        errorDetails.setFileName(fileName);
+        errorDetails.setUserId(clientId);
+        errorDetails.setStackTrace(Arrays.toString(stackTrace));
+        errorDetails.setCreateTs(DateUtil.getCurrentTimeStamp());
+        return errorDetails;
     }
 
     private String getUploadDirectoryBasedOnFilePrefix(String fileName) {
@@ -112,14 +127,14 @@ public class FileUploadServiceImpl implements FileUploadService {
         fileDetails.setReceivedTs(DateUtil.getCurrentTimeStamp());
         fileDetails.setTaskId(taskId);
         fileDetails.setClientIpAddress(ipAddress);
-        fileDetails.setUserId(clientId);
+        fileDetails.setClientId(clientId);
         fileDetails.setTaskResult(ApplicationConstants.STATUS_DESC_IN_PROGRESSS);
         fileDetails.setUploadDir(uploadDirectory);
         fileDetails.setFileExtension(extension);
         return fileDetails;
     }
 
-    public Page<FileDetailsResponse> filterByTimestamp(DateFilterRequestBody date,Integer from){
+    public Page<FileDetails> filterByTimestamp(DateFilterRequestBody date,Integer from){
         Integer fromYear = date.getFromYear();
         Integer endYear = date.getEndYear() ==null ? fromYear : date.getEndYear();
         Integer fromMonth = date.getFromMonth() == null ? 1 : date.getFromMonth();
@@ -144,7 +159,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     public Page<FileDetails> getFileDetailsFilterByUserId(String userId,Integer from){
-        return fileUploadRepo.findByUserId(userId, PageRequest.of(from,ApplicationConstants.PAGE_SIZE));
+        return fileUploadRepo.findByClientId(userId, PageRequest.of(from,ApplicationConstants.PAGE_SIZE));
     }
 
     public Integer getNoOfDaysBasedOnMonthAndYear(Integer month, Integer year){

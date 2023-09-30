@@ -68,7 +68,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/userProfile")
+    @GetMapping("/client/clientProfile")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public String userProfile(Authentication authentication,
                               @RequestHeader ("authorization") String token) {
