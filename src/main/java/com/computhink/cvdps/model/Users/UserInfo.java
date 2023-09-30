@@ -16,6 +16,7 @@ public class UserInfo {
     private String password;
     private String roles;
     private String clientIpAddress;
+    private Integer expiryDays;
     private String token;
 
 }

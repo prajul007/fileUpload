@@ -11,6 +11,7 @@ import com.computhink.cvdps.service.UserService.UserInfoServiceImpl;
 import com.computhink.cvdps.service.UserService.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +45,9 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Value("${number.of.token.expiry.days}")
+    private Integer expiryDays;
+
     @GetMapping("/welcome")
     public String welcome() {
         return "Welcome this endpoint is not secure";
@@ -54,7 +58,7 @@ public class UserController {
     public ResponseEntity<String> addNewUser(@RequestBody UserInfo userInfo,
                                              HttpServletRequest httpServletRequest) {
         try {
-            String token = jwtService.generateToken(userInfo.getEmail());
+            String token = jwtService.generateToken(userInfo.getEmail(),userInfo.getExpiryDays()==null ? expiryDays: userInfo.getExpiryDays());
             userInfo.setClientIpAddress(httpServletRequest.getRemoteAddr());
             userInfo.setToken(token);
             userInfo.setRoles(ApplicationConstants.ROLE_USER);
@@ -100,7 +104,7 @@ public class UserController {
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            String token=  jwtService.generateToken(authRequest.getUsername());
+            String token=  jwtService.generateToken(authRequest.getUsername(),expiryDays);
             userIdforRepository.updateTokenGenerated(authRequest.getUsername(),token);
             return token;
         } else {
