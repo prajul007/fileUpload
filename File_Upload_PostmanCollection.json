@@ -30,14 +30,14 @@
 			"response": []
 		},
 		{
-			"name": "Add User",
+			"name": "Add Client",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDMxMzEsImV4cCI6MTY5NTc0NDkzMX0.kSwaXiOMsg4WZvd7F7k5POSFF9g2HKTlZlJKMHjcUXU",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2OTYxNTEwMDAsImV4cCI6MTcyNzY4NzAwMH0.F0X_8Oio6QKdp3oJObqfhfMFq152P-XGd-b45MqilYs",
 							"type": "string"
 						}
 					]
@@ -46,7 +46,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"dev_dummy\",\r\n    \"password\": \"123456\",\r\n    \"email\": \"dummy12@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"name\": \"test\",\r\n    \"password\": \"12345678\",\r\n    \"email\": \"test@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -69,13 +69,13 @@
 			"response": []
 		},
 		{
-			"name": "Generate User Auth Token",
+			"name": "Generate Client Auth Token",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"qa@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"raw": "{\r\n    \"username\": \"test@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -127,7 +127,7 @@
 			"response": []
 		},
 		{
-			"name": "Get User Profile",
+			"name": "Get Client Profile",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -137,7 +137,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjM3MjksImV4cCI6MTY5NTY2NTUyOX0.Miochln74stChQ0IB_i8v5z1KMzCjAQa7ct2V6JnOPU",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1NDcxOCwiZXhwIjoxNzI3NjkwNzE4fQ.qUEB8oysuQYTJdd-JsXkj7L4rl-bwfssoeNalgFEh7w",
 							"type": "string"
 						}
 					]
@@ -154,7 +154,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/auth/user/userProfile",
+					"raw": "http://localhost:8080/auth/client/clientProfile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -162,8 +162,8 @@
 					"port": "8080",
 					"path": [
 						"auth",
-						"user",
-						"userProfile"
+						"client",
+						"clientProfile"
 					]
 				}
 			},
@@ -220,7 +220,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDY5MDIsImV4cCI6MTY5NTc0ODcwMn0.DCepEZmH6z8hOVjOh3lTxaUKjLWZiLalxP5kvL68OrU",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -233,7 +233,11 @@
 						{
 							"key": "files",
 							"type": "file",
-							"src": "/Users/p0g03s9/Downloads/private_file.docx"
+							"src": [
+								"/Users/p0g03s9/Downloads/PostMan_Collection.json",
+								"/Users/p0g03s9/Downloads/private_file.docx",
+								"/Users/p0g03s9/Downloads/public_file.docx"
+							]
 						}
 					]
 				},
@@ -253,14 +257,14 @@
 			"response": []
 		},
 		{
-			"name": "Filter Based on TimeStamp",
+			"name": "Get Task Logs Based On Ts",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -269,7 +273,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromYear\": 2023,\n    \"fromMonth\": 9,\n    \"fromDay\": 20,\n    \"fromHour\": 22,\n    \"fromMinute\": 46,\n    \"fromSecond\": 30,\n\n    \"endYear\": 2023,\n    \"endMonth\": 9,\n    \"endDay\": 25,\n    \"endHour\": 23,\n    \"endMinute\": 46,\n    \"endSecond\": 55\n}",
+					"raw": "{\n    \"fromYear\": 2023,\n    \"fromMonth\": 9,\n    \"fromDay\": 20,\n    \"fromHour\": 22,\n    \"fromMinute\": 46,\n    \"fromSecond\": 30,\n\n    \"endYear\": 2023,\n    \"endMonth\": 9,\n    \"endDay\": 27,\n    \"endHour\": 23,\n    \"endMinute\": 46,\n    \"endSecond\": 55\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -277,7 +281,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/file/filterByTimestamp?from=0",
+					"raw": "http://localhost:8080/file/taskLogs?from=0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -285,7 +289,7 @@
 					"port": "8080",
 					"path": [
 						"file",
-						"filterByTimestamp"
+						"taskLogs"
 					],
 					"query": [
 						{
@@ -303,14 +307,14 @@
 			"response": []
 		},
 		{
-			"name": "Filter Based on Month",
+			"name": "Get Task Logs Based On Ts-By Date",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -319,7 +323,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"fromYear\": 2023,\n    \"fromMonth\": 7,\n\n    \"endYear\": 2023,\n    \"endMonth\": 9\n}",
+					"raw": "{\n    \"fromYear\": 2023,\n    \"fromMonth\": 9,\n    \"fromDay\": 30,\n\n    \"endYear\": 2023,\n    \"endMonth\": 9,\n    \"endDay\": 30\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -327,7 +331,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/file/filterByTimestamp?from=0",
+					"raw": "http://localhost:8080/file/taskLogs?from=0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -335,7 +339,7 @@
 					"port": "8080",
 					"path": [
 						"file",
-						"filterByTimestamp"
+						"taskLogs"
 					],
 					"query": [
 						{
@@ -353,14 +357,14 @@
 			"response": []
 		},
 		{
-			"name": "Filter Based on Year",
+			"name": "Get Task Logs Based On Ts-By Year",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -377,7 +381,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/file/filterByTimestamp?from=0",
+					"raw": "http://localhost:8080/file/taskLogs?from=0",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -385,7 +389,7 @@
 					"port": "8080",
 					"path": [
 						"file",
-						"filterByTimestamp"
+						"taskLogs"
 					],
 					"query": [
 						{
@@ -398,14 +402,14 @@
 			"response": []
 		},
 		{
-			"name": "Get File Details Based on TaskId",
+			"name": "Get Task Status Based on TaskId",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -414,7 +418,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "[\n    \"07967269-7ecb-4634-9557-3fb3567dca79\",\n    \"abcd\"\n]",
+					"raw": "[\n    \"ed41476d-f18e-4c53-826f-45bc4e64a3f8\"\n]",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -422,7 +426,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/file/fileDetails",
+					"raw": "http://localhost:8080/file/taskStatus",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -430,7 +434,7 @@
 					"port": "8080",
 					"path": [
 						"file",
-						"fileDetails"
+						"taskStatus"
 					]
 				}
 			},
@@ -444,7 +448,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU3NDY5MDIsImV4cCI6MTY5NTc0ODcwMn0.DCepEZmH6z8hOVjOh3lTxaUKjLWZiLalxP5kvL68OrU",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1MTQ0MCwiZXhwIjoxNzI3Njg3NDQwfQ.xhX2pRXDviqgZbLUHpwb-VR09IIQiXuroaORHBsebuw",
 							"type": "string"
 						}
 					]
@@ -504,7 +508,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJxYUBnbWFpbC5jb20iLCJpYXQiOjE2OTU2NjI5ODMsImV4cCI6MTY5NTY2NDc4M30.9pnwG1nkldNSG3kRNRsqEvXh57IFJT4Sy-vlF0IIAdA",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY5NjE1NDcxOCwiZXhwIjoxNzI3NjkwNzE4fQ.qUEB8oysuQYTJdd-JsXkj7L4rl-bwfssoeNalgFEh7w",
 							"type": "string"
 						}
 					]
