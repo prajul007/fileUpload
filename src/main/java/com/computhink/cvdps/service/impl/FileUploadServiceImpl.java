@@ -106,7 +106,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     private void uploadFile(MultipartFile file, String taskId, String extension, String uploadDirectory){
 
         try {
-            Path fileStorageLocation = Paths.get(basePath + "/" + uploadDirectory).toAbsolutePath().normalize();
+            Path fileStorageLocation = Paths.get(basePath).toAbsolutePath().normalize();
             try {
                 Files.createDirectories(fileStorageLocation);
             } catch (Exception ex) {
@@ -134,7 +134,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         return fileDetails;
     }
 
-    public Page<FileDetails> filterByTimestamp(DateFilterRequestBody date,Integer from){
+    public Page<FileDetails> filterByTimestamp(DateFilterRequestBody date, Integer from, String name){
         Integer fromYear = date.getFromYear();
         Integer endYear = date.getEndYear() ==null ? fromYear : date.getEndYear();
         Integer fromMonth = date.getFromMonth() == null ? 1 : date.getFromMonth();
@@ -151,11 +151,12 @@ public class FileUploadServiceImpl implements FileUploadService {
         return fileUploadRepo.getTaskIdByDate(
                 LocalDateTime.of(fromYear,fromMonth,fromDay,fromHour,fromMinute,fromSecond),
                 LocalDateTime.of(endYear,endMonth,endDay,endHour,endMinute,endSecond),
+                name,
                 PageRequest.of(from,ApplicationConstants.PAGE_SIZE));
     }
 
-    public FileDetails getFileDetailsFilterByTaskId(String taskId){
-        return fileUploadRepo.findByTaskId(taskId);
+    public FileDetails getFileDetailsFilterByTaskId(String taskId, String name){
+        return fileUploadRepo.findByTaskIdAndClientId(taskId,name);
     }
 
     public Page<FileDetails> getFileDetailsFilterByUserId(String userId,Integer from){

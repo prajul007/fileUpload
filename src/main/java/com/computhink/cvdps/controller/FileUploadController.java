@@ -92,7 +92,7 @@ public class FileUploadController {
         if(userInfoOptional.isPresent()){
             if(token.equals(userInfoOptional.get().getToken())){
                 try{
-                    return new ResponseEntity<>(fileUploadService.filterByTimestamp(dateFilterRequestBody,from),HttpStatus.OK);
+                    return new ResponseEntity<>(fileUploadService.filterByTimestamp(dateFilterRequestBody,from, authentication.getName()),HttpStatus.OK);
                 } catch (Exception ex){
                     log.error("Exception Occurred while fetching file details based on timestamp from the db: ", ex);
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -114,7 +114,7 @@ public class FileUploadController {
                 return taskIds.stream()
                         .map(taskId -> {
                             try{
-                                return new ResponseEntity<>(fileUploadService.getFileDetailsFilterByTaskId(taskId),HttpStatus.OK);
+                                return new ResponseEntity<>(fileUploadService.getFileDetailsFilterByTaskId(taskId,authentication.getName()),HttpStatus.OK);
                             } catch (Exception ex){
                                 log.error("Exception Occurred while fetching file details based on taskId from the db: ", ex);
                                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

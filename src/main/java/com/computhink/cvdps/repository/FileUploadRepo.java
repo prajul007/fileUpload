@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Repository
 public interface FileUploadRepo extends MongoRepository<FileDetails,String> {
 
-    @Query(value = "{'receivedTs' : { $gte: ?0, $lte: ?1 } }")
-    public Page<FileDetails> getTaskIdByDate(LocalDateTime from, LocalDateTime to, Pageable pageable);
+    @Query(value = "{'receivedTs' : { $gte: ?0, $lte: ?1 }, 'clientId': ?2 }")
+    public Page<FileDetails> getTaskIdByDate(LocalDateTime from, LocalDateTime to, String clientId,  Pageable pageable);
 
-    FileDetails findByTaskId(String taskId);
+    FileDetails findByTaskIdAndClientId(String taskId,String clientId);
     Page<FileDetails> findByClientId(String userId, Pageable pageable);
 }
