@@ -20,5 +20,8 @@ public class ApplicationConstants {
     public static final String FILE_UPLOAD_PUBLIC_DIR = "public";
     public static final String FILE_UPLOAD_PRIVATE_DIR = "private";
     public static final String FILE_UPLOAD_DEFAULT_DIR = "default";
+    public static final String FILE_UPLOAD = "fileUpload";
+    public static final String GET_TASK_STATUS = "getTaskStatus";
+    public static final String GET_TASK_LOGS = "getTaskLogs";
     public static final Integer PAGE_SIZE = 10;
 }

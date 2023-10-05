@@ -441,7 +441,7 @@
 			"response": []
 		},
 		{
-			"name": "Get Files Uploaded by User",
+			"name": "Get Files Uploaded by Client",
 			"request": {
 				"auth": {
 					"type": "bearer",

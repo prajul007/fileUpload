@@ -3,8 +3,10 @@ package com.computhink.cvdps.controller;
 
 import com.computhink.cvdps.model.DateFilterRequestBody;
 import com.computhink.cvdps.model.Users.UserInfo;
+import com.computhink.cvdps.repository.ErrorDetailsRepository;
 import com.computhink.cvdps.repository.UserInfoRepository;
 import com.computhink.cvdps.service.FileUploadService;
+import com.computhink.cvdps.utils.ErrorDetialsUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class FileUploadController {
     @Autowired
     UserInfoRepository userInfoRepository;
 
+    @Autowired
+    ErrorDetailsRepository errorDetailsRepository;
+
     @Value("${file.upload.max.size}")
     private long fileUploadMaxSize;
 
@@ -53,24 +58,17 @@ public class FileUploadController {
         if(userInfoOptional.isPresent()){
             if(token.equals(userInfoOptional.get().getToken())){
                 return Arrays.asList(files)
-                        .stream()
+                        .parallelStream()
                         .map(file -> {
                             if(file.getSize()>1048576){
                                 return new ResponseEntity<>("File Size should not be more than 1MB. ",HttpStatus.INTERNAL_SERVER_ERROR);
                             }
-                            if(userInfoOptional.isPresent()){
-                                if(userInfoOptional.get().getClientIpAddress().equals(httpServletRequest.getRemoteAddr())){
-                                    try{
-                                        return new ResponseEntity<>(fileUploadService.storeFile(file,authentication.getName(),httpServletRequest.getRemoteAddr()), HttpStatus.OK);
-                                    } catch (Exception ex){
-                                        log.error("Exception Occurred while uploading single file to the root folder: ", ex);
-                                        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-                                    }
-                                } else {
-                                    return new ResponseEntity<>("Unable to match the ipAddress. Please Contact Admin.",HttpStatus.INTERNAL_SERVER_ERROR);
-                                }
+                            try{
+                                return new ResponseEntity<>(fileUploadService.storeFile(file,authentication.getName(),httpServletRequest.getRemoteAddr()), HttpStatus.OK);
+                            } catch (Exception ex){
+                                log.error("Exception Occurred while uploading single file to the root folder: ", ex);
+                                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                             }
-                            return new ResponseEntity<>("Unable to upload file. Please Contact admin.",HttpStatus.INTERNAL_SERVER_ERROR);
                         })
                         .collect(Collectors.toList());
             }
@@ -95,6 +93,7 @@ public class FileUploadController {
                     return new ResponseEntity<>(fileUploadService.filterByTimestamp(dateFilterRequestBody,from, authentication.getName()),HttpStatus.OK);
                 } catch (Exception ex){
                     log.error("Exception Occurred while fetching file details based on timestamp from the db: ", ex);
+                    ErrorDetialsUtil.setErrorDetailsForGetTaskLogs(ex.getStackTrace(),authentication.getName());
                     return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
@@ -111,12 +110,13 @@ public class FileUploadController {
         token = token.substring(7);
         if(userInfoOptional.isPresent()){
             if(token.equals(userInfoOptional.get().getToken())){
-                return taskIds.stream()
+                return taskIds.parallelStream()
                         .map(taskId -> {
                             try{
                                 return new ResponseEntity<>(fileUploadService.getFileDetailsFilterByTaskId(taskId,authentication.getName()),HttpStatus.OK);
                             } catch (Exception ex){
                                 log.error("Exception Occurred while fetching file details based on taskId from the db: ", ex);
+                                ErrorDetialsUtil.setErrorDetailsForGetTaskStatus(taskId,ex.getStackTrace(),authentication.getName());
                                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
                             }
                         }).collect(Collectors.toList());

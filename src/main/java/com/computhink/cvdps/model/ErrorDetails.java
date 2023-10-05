@@ -11,4 +11,5 @@ public class ErrorDetails {
     String stackTrace;
     LocalDateTime createTs;
     String userId;
+    String type;
 }

@@ -11,6 +11,7 @@ import com.computhink.cvdps.repository.ErrorDetailsRepository;
 import com.computhink.cvdps.repository.FileUploadRepo;
 import com.computhink.cvdps.service.FileUploadService;
 import com.computhink.cvdps.utils.DateUtil;
+import com.computhink.cvdps.utils.ErrorDetialsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,19 +59,9 @@ public class FileUploadServiceImpl implements FileUploadService {
             customFileUploadRepo.updateFileUploadStatus(ApplicationConstants.STATUS_PENDING,ApplicationConstants.STATUS_DESC_PENDING,taskId);
             return setUploadFileResponse(file,taskId,fileName);
         } catch (Exception ex) {
-            errorDetailsRepository.save(setErrorDetails(taskId,fileName,ex.getStackTrace(),clientId));
+            errorDetailsRepository.save(ErrorDetialsUtil.setErrorDetailsForUpload(taskId,fileName,ex.getStackTrace(),clientId));
             throw new RuntimeException("Exception occurred! + ",ex);
         }
-    }
-
-    private ErrorDetails setErrorDetails(String taskId, String fileName, StackTraceElement[] stackTrace, String clientId) {
-        ErrorDetails errorDetails = new ErrorDetails();
-        errorDetails.setTaskId(taskId);
-        errorDetails.setFileName(fileName);
-        errorDetails.setUserId(clientId);
-        errorDetails.setStackTrace(Arrays.toString(stackTrace));
-        errorDetails.setCreateTs(DateUtil.getCurrentTimeStamp());
-        return errorDetails;
     }
 
     private String getUploadDirectoryBasedOnFilePrefix(String fileName) {
